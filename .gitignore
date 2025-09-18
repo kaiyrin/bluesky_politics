@@ -9,3 +9,6 @@ __pycache__/
 .DS_Store
 instance
 EOF
+political_posts.json
+all_posts_plain.txt
+plain_posts.json

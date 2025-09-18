@@ -2,6 +2,7 @@ from ast import keyword
 from atproto import Client
 import os
 import time
+import json
 
 
 client = Client()
@@ -58,3 +59,30 @@ def get_political_posts(account_input_list,posts_per_account, client=client):
         except Exception as e:
             print(f"Error fetching posts for {account}: {e}")
     return all_posts
+
+
+
+import json
+
+
+def save_posts_to_json(posts_by_author, formatted_filename="political_posts.json", plain_text_filename="plain_posts.json"):
+    # 1. Save formatted JSON with labeled posts per author
+    formatted_posts = {
+        author: {f"post{i+1}": post for i, post in enumerate(posts)}
+        for author, posts in posts_by_author.items()
+    }
+
+    with open(formatted_filename, "w", encoding="utf-8") as f_json:
+        json.dump(formatted_posts, f_json, ensure_ascii=False, indent=2)
+
+    # 2. Save plain text posts as a list in a separate JSON file
+    all_plain_posts = []
+    for posts in posts_by_author.values():
+        all_plain_posts.extend(posts)  # collect all post texts
+
+    with open(plain_text_filename, "w", encoding="utf-8") as f_plain_json:
+        json.dump(all_plain_posts, f_plain_json, ensure_ascii=False, indent=2)
+
+    print(f"✅ Saved formatted posts to '{formatted_filename}'")
+    print(f"✅ Saved plain text posts to '{plain_text_filename}'")
+
